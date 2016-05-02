@@ -3,7 +3,12 @@ package com.example.android_ed1.entitiesclass.model.servicelayer.implementation;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Participante;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Session;
+import com.example.android_ed1.entitiesclass.model.persistencelayer.impl.flatfile.manager.FlatFilePersistenceManager;
+import com.example.android_ed1.entitiesclass.model.persistencelayer.impl.rest.manager.RestPersistenceManager;
+import com.example.android_ed1.entitiesclass.model.persistencelayer.impl.sql.manager.SqlPersistenceManager;
 import com.example.android_ed1.entitiesclass.model.servicelayer.api.IEventoService;
+
+import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +19,25 @@ import java.util.List;
  * Created by android-ed1 on 02/05/2016.
  */
 public class EventoService implements IEventoService {
+
+    //Referencias a los managers de persistencia
+    // que inyecta el servicemanger
+
+    private FlatFilePersistenceManager flatFilePersistenceManager;
+    private RestPersistenceManager restPersistenceManager;
+    private SqlPersistenceManager sqlPersistenceManager;
+
+    public EventoService(
+        FlatFilePersistenceManager flatFilePersistenceManager, RestPersistenceManager restPersistenceManager,
+        SqlPersistenceManager sqlPersistenceManager
+
+    ){
+        this.flatFilePersistenceManager = flatFilePersistenceManager;
+        this.restPersistenceManager = restPersistenceManager;
+        this.sqlPersistenceManager = sqlPersistenceManager;
+    }
+
+
     @Override
     public List<Evento> createInitialLocalEventos() throws ParseException {
         List<Evento> eventos = new ArrayList<Evento>();
@@ -133,6 +157,12 @@ public class EventoService implements IEventoService {
         evento2.getSesiones().add(sesion22);
 
         //todo:persist this events wherever
+        try {
+            flatFilePersistenceManager.getEventoDAO().eventosSave(eventos);
+        }catch (JSONException e){
+
+        }
+
         return eventos;
     };
 }

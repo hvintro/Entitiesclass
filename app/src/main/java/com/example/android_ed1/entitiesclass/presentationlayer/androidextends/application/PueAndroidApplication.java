@@ -19,7 +19,7 @@ public class PueAndroidApplication extends Application{
     public PueAndroidApplication(){
         super();
         eventos = new ArrayList<Evento>();
-        servicemaneger = new servicemaneger();
+        servicemaneger = new servicemaneger(this);
     }
 
     public List<Evento> getEventos() {
