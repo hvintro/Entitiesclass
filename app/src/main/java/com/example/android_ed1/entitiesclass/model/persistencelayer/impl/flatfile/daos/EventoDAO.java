@@ -8,7 +8,10 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
@@ -18,6 +21,8 @@ import java.util.List;
 public class EventoDAO implements IEventoDao {
 
     private Context context;
+    public String jeison;
+    JSONObject jeisonobiect;
 
     public EventoDAO(Context context) {
         this.context = context;
@@ -59,4 +64,43 @@ public class EventoDAO implements IEventoDao {
         }
 
     }
+
+    @Override
+    public Evento geteventobydorsal(String Dorsal) throws Exception {
+
+        String json = null;
+        try {
+
+            InputStream is = context.getAssets().open("file_name.json");
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+
+        }
+        Evento hola = new Evento();
+
+        try {
+            JSONObject jeisonobiect= (JSONObject) new JSONTokener(json).nextValue();
+            JSONObject json2 = jeisonobiect.getJSONObject("");
+            hola = (Evento) json2.get("");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return hola;
+    }
+
+
+
 }

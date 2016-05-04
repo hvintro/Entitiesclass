@@ -15,14 +15,29 @@
         android:text="Dorsal"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-
         android:id="@+id/main_tv_dorsal"/>
+
+
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/main_etDorsal"
         android:layout_below="@+id/main_tv_dorsal"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:text="00005"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_etDorsal"
+        android:id="@+id/results"
+        android:text="provisional results"/>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="action"
+        android:layout_alignParentRight="true"
+        android:id="@+id/buton"/>
 
 </RelativeLayout>

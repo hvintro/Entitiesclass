@@ -12,5 +12,6 @@ import java.util.List;
 public interface IEventoDao {
 
     void eventosSave(List<Evento> eventos) throws JSONException;
+    Evento geteventobydorsal(String Dorsal) throws Exception;
 
 }

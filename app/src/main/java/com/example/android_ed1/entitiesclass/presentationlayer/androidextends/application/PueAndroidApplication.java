@@ -30,6 +30,7 @@ public class PueAndroidApplication extends Application{
         this.eventos = eventos;
     }
 
+
     public servicemaneger getServicemaneger() {
         return servicemaneger;
     }

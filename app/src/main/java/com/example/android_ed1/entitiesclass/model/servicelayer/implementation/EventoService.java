@@ -159,10 +159,29 @@ public class EventoService implements IEventoService {
         //todo:persist this events wherever
         try {
             flatFilePersistenceManager.getEventoDAO().eventosSave(eventos);
+          //  flatFilePersistenceManager.getEventoDAO().eventoRead();
         }catch (JSONException e){
 
         }
 
         return eventos;
-    };
+    }
+
+    @Override
+    public Evento getEventobydorsal(String dorsal) {
+
+        try {
+
+           return flatFilePersistenceManager.getEventoDAO().geteventobydorsal(dorsal);
+
+        }catch (Exception e) {
+
+
+        }
+            return null;
+    }
+
+
+
+
 }
