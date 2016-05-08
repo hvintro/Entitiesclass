@@ -1,6 +1,7 @@
 package com.example.android_ed1.entitiesclass.model.persistencelayer.api;
 
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
+import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Participante;
 
 import org.json.JSONException;
 
@@ -12,6 +13,6 @@ import java.util.List;
 public interface IEventoDao {
 
     void eventosSave(List<Evento> eventos) throws JSONException;
-    Evento geteventobydorsal(String Dorsal) throws Exception;
+    Participante getparticipantebydorsal (String Dorsal) throws Exception;
 
 }

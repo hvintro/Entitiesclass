@@ -1,11 +1,14 @@
 package com.example.android_ed1.entitiesclass.model.persistencelayer.impl.flatfile.daos;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
+import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Participante;
 import com.example.android_ed1.entitiesclass.model.persistencelayer.api.IEventoDao;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -66,12 +69,12 @@ public class EventoDAO implements IEventoDao {
     }
 
     @Override
-    public Evento geteventobydorsal(String Dorsal) throws Exception {
+    public Participante getparticipantebydorsal(String Dorsal) throws Exception {
 
         String json = null;
         try {
 
-            InputStream is = context.getAssets().open("file_name.json");
+            InputStream is = context.getAssets().open("eventos.json");
 
             int size = is.available();
 
@@ -88,17 +91,37 @@ public class EventoDAO implements IEventoDao {
             ex.printStackTrace();
 
         }
-        Evento hola = new Evento();
+
 
         try {
-            JSONObject jeisonobiect= (JSONObject) new JSONTokener(json).nextValue();
-            JSONObject json2 = jeisonobiect.getJSONObject("");
-            hola = (Evento) json2.get("");
-        } catch (JSONException e) {
-            e.printStackTrace();
+            JSONArray jeisonaznar= (JSONArray) new JSONTokener(json).nextValue();
+            for(int i=0; i < jeisonaznar.length(); i++) {
+
+                JSONObject jsonobject = jeisonaznar.getJSONObject(i);
+
+                JSONArray allcorredores = jsonobject.getJSONArray("corredores");
+
+                for (int j= 0; j < allcorredores.length();j++) {
+                    JSONObject jsonobject2 = allcorredores.getJSONObject(j);
+                    String dorsal = jsonobject2.getString("dorsal");
+
+                    if (dorsal.equals(Dorsal)) {
+
+                     //   Participante hemman = jsonobject2;
+                        return new Gson().fromJson(jsonobject2.toString(), Participante.class);
+
+                    }
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            Log.d("Json excemption: ", e.toString());
+            return null;
         }
 
-        return hola;
+        return null;
     }
 
 

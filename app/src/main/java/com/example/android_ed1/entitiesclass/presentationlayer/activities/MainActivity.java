@@ -17,6 +17,7 @@ import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Participante;
 import com.example.android_ed1.entitiesclass.model.servicelayer.manager.servicemaneger;
 import com.example.android_ed1.entitiesclass.presentationlayer.androidextends.application.PueAndroidApplication;
+import com.example.android_ed1.entitiesclass.utilitieslayer.AppUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -38,12 +39,15 @@ public class MainActivity extends AppCompatActivity {
     private Timer timer;
     private final long DELAY = 5000; // milliseconds
     private double seconds;
+    private Button read;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Boolean d = AppUtils.isAtributeValue();
 
         app =  (PueAndroidApplication) getApplication();
         servicemanager = app.getServicemaneger();
@@ -128,7 +132,24 @@ public class MainActivity extends AppCompatActivity {
 
         //Todo: hacer esto, luego tratarlo como si fuera una llamada asincrona y luego cuando acabe esta llamafa tratar de pintar un boton
 
-        Evento hola = app.getServicemaneger().getEventoService().getEventobydorsal("00005");
+        read = (Button) findViewById(R.id.Readbutton);
+
+        read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Participante  hola;
+
+               /* new Thread(new Runnable() {
+                    public void run() {
+                        Participante hola = app.getServicemaneger().getEventoService().getEventobydorsal("00004");
+
+                }).start();
+
+                    Toast.makeText(MainActivity.this,hola.getEmail().toString(),Toast.LENGTH_SHORT).show();*/
+            }
+        });
+
+
 
 
     }

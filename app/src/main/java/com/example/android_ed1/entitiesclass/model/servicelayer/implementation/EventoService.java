@@ -168,11 +168,11 @@ public class EventoService implements IEventoService {
     }
 
     @Override
-    public Evento getEventobydorsal(String dorsal) {
+    public Participante getEventobydorsal(String dorsal) {
 
         try {
 
-           return flatFilePersistenceManager.getEventoDAO().geteventobydorsal(dorsal);
+           return flatFilePersistenceManager.getEventoDAO().getparticipantebydorsal(dorsal);
 
         }catch (Exception e) {
 

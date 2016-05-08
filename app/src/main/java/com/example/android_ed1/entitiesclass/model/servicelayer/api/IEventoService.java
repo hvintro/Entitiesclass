@@ -1,6 +1,7 @@
 package com.example.android_ed1.entitiesclass.model.servicelayer.api;
 
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
+import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Participante;
 
 import org.json.JSONException;
 
@@ -14,6 +15,6 @@ public interface IEventoService {
 
     List<Evento> createInitialLocalEventos() throws ParseException;
    // List<Evento> readlocaleventos() throws JSONException;
-    Evento getEventobydorsal (String dorsal);
+    Participante getEventobydorsal (String dorsal);
 
 }

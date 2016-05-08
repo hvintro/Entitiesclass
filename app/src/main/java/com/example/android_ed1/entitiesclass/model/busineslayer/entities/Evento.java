@@ -1,15 +1,23 @@
 package com.example.android_ed1.entitiesclass.model.busineslayer.entities;
 
+import com.example.android_ed1.entitiesclass.cAnnotation;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.base.Entitybase;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by android-ed1 on 27/04/2016.
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD})
+@interface macundra{}
 public class Evento extends Entitybase {
-
+    @macundra()
     private String nombre;
     private String descripcion;
     private int numeroplazas;
@@ -23,7 +31,7 @@ public class Evento extends Entitybase {
         setCorredores(new ArrayList<Participante>());
         setSesiones(new ArrayList<Session>());
     }
-
+    @cAnnotation()
     public String getNombre() {
         return nombre;
     }
