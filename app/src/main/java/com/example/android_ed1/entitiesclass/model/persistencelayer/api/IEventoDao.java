@@ -14,5 +14,7 @@ public interface IEventoDao {
 
     void eventosSave(List<Evento> eventos) throws JSONException;
     Participante getparticipantebydorsal (String Dorsal) throws Exception;
+    Evento getEventoByDorsal(String dorsal);
+
 
 }

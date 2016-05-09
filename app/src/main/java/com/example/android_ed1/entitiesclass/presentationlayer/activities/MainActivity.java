@@ -1,25 +1,31 @@
 package com.example.android_ed1.entitiesclass.presentationlayer.activities;
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android_ed1.entitiesclass.R;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Participante;
+import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Session;
 import com.example.android_ed1.entitiesclass.model.servicelayer.manager.servicemaneger;
 import com.example.android_ed1.entitiesclass.presentationlayer.androidextends.application.PueAndroidApplication;
 import com.example.android_ed1.entitiesclass.utilitieslayer.AppUtils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -37,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private List<Evento> specialEvents;
     private Button button;
     private Timer timer;
-    private final long DELAY = 5000; // milliseconds
+    private final long DELAY = 1000; // milliseconds
     private double seconds;
     private Button read;
+    private ImageButton main_btn_start;
+
 
 
     @Override
@@ -48,28 +56,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Boolean d = AppUtils.isAtributeValue();
-
+        timer=new Timer();
         app =  (PueAndroidApplication) getApplication();
         servicemanager = app.getServicemaneger();
 
-        try {
-            app.setEventos(servicemanager.getEventoService().createInitialLocalEventos());
+        try {app.setEventos(servicemanager.getEventoService().createInitialLocalEventos());
+        }catch (ParseException e){e.printStackTrace();}
 
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-
-
-
+        main_btn_start = (ImageButton) findViewById(R.id.main_btn_start);
+        main_btn_start.setTag("Start");
         searched = (EditText) findViewById(R.id.main_etDorsal);
         resulttv = (TextView) findViewById(R.id.results);
 
         search = searched.getText().toString();
-
         specialEvents = new ArrayList<Evento>();
-
         specialEvents = app.getEventos();
-
 
         button = (Button) findViewById(R.id.buton) ;
 
@@ -86,7 +87,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        timer=new Timer();
+        main_btn_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (main_btn_start.getTag().equals("Start")) {
+                    main_btn_start.setTag("Stop");
+                    main_btn_start.setBackgroundResource(R.drawable.stopbutton);
+
+                    app.setAsistenciaActual(servicemanager.getEventoService().addCurrentAssitenciaToEvent(app.getEvento()));
+
+                    //4 - Se ha decidido hacer en el evento service
+                   /*
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                    Calendar cal = Calendar.getInstance();
+
+                    try {
+                        Evento evento = app.getServicemaneger().getEventoService().getEventobydorsal2(searched.getText().toString());
+                        Session s = new Session();
+
+                        for (Session s1 : evento.getSesiones()) {
+
+                            if (cal.getTime().after(s1.getFechainicio()) && cal.getTime().before(s1.getFechafin()) ){
+
+
+                            }
+
+                        }
+                    }catch (Exception e){
+                        Log.e("Fat32 Error", e.toString());
+                    }
+                */
+
+                } else {
+                    main_btn_start.setTag("Start");
+                    main_btn_start.setBackgroundResource(R.drawable.startbutton);
+
+
+                }
+            }
+        });
+
 
 
 
@@ -105,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
-                Calendar c = Calendar.getInstance();
+             /*   Calendar c = Calendar.getInstance();
                 double secondary = seconds;
                 seconds = c.get(Calendar.SECOND);
 
@@ -122,7 +162,17 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
-                }, DELAY);
+                }, DELAY);*/
+                timer.cancel();
+                timer = new Timer();
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                       new EventosAsincrono().execute(app,searched.getText().toString(),main_btn_start);
+                    }
+                },DELAY);
+
 
             }
         });
@@ -153,5 +203,40 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+}
+
+class EventosAsincrono extends AsyncTask<Object, Object, Evento>{
+
+    private PueAndroidApplication app=null;
+    private ImageButton main_btn_start = null;
+
+    @Override
+    protected Evento doInBackground(Object... params) {
+
+        app = (PueAndroidApplication) params[0];
+        String dorsal = (String) params[1];
+        main_btn_start = (ImageButton) params[2];
+        try {
+
+            Evento evento = app.getServicemaneger().getEventoService().getEventobydorsal2(dorsal);
+            app.setEvento(evento);
+            return evento;
+
+        }catch (Exception e){
+
+        }
+        return null;
+    }
+
+    //Accediendo a la ui en post execute asincrono
+    protected void onPostExecute(Evento evento){
+        super.onPostExecute(evento);
+
+        if(evento != null){
+            main_btn_start.setVisibility(View.VISIBLE);
+        }
+
+    }
+
 }
 

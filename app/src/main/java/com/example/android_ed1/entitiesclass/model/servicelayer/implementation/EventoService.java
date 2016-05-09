@@ -1,5 +1,6 @@
 package com.example.android_ed1.entitiesclass.model.servicelayer.implementation;
 
+import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Asistencia;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Participante;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Session;
@@ -13,6 +14,7 @@ import org.json.JSONException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -147,7 +149,7 @@ public class EventoService implements IEventoService {
         evento2.setCorredores(corredores2);
 
         Session sesion21 = new Session();
-        sesion21.setFechainicio(new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse("01/01/2018 10:00:00"));
+        sesion21.setFechainicio(new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse("01/01/2016 10:00:00"));
         sesion21.setFechafin(new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse("01/01/2018 18:00:00"));
         evento2.getSesiones().add(sesion21);
 
@@ -168,6 +170,11 @@ public class EventoService implements IEventoService {
     }
 
     @Override
+    public Evento getEventobydorsal2(String dorsal) throws JSONException {
+        return flatFilePersistenceManager.getEventoDAO().getEventoByDorsal(dorsal);
+    }
+
+    @Override
     public Participante getEventobydorsal(String dorsal) {
 
         try {
@@ -180,8 +187,22 @@ public class EventoService implements IEventoService {
         }
             return null;
     }
-
-
+    //3
+    @Override
+    public Asistencia addCurrentAssitenciaToEvent(Evento evento) {
+        Asistencia asistencia = null;
+        for (Session session : evento.getSesiones()){
+          if(session.getFechainicio().after(new Date()) && session.getFechafin().before(new Date())){
+              asistencia = new Asistencia();
+              asistencia.setInicio(new Date());
+              asistencia.setParticipante(evento.getCorredores().get(0));
+              //finalmente guardamos la asistencia creada
+              session.getAsistencias().add(asistencia);
+              break;
+          }
+        }
+        return asistencia;
+    }
 
 
 }

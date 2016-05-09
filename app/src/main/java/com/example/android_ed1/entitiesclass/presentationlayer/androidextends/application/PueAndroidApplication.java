@@ -2,6 +2,7 @@ package com.example.android_ed1.entitiesclass.presentationlayer.androidextends.a
 
 import android.app.Application;
 
+import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Asistencia;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
 
 import java.util.ArrayList;
@@ -15,11 +16,16 @@ public class PueAndroidApplication extends Application{
 
     private List<Evento> eventos;
     private servicemaneger servicemaneger;
+// referecias globales
+    private Evento evento;
+    private Asistencia asistenciaActual;
 
     public PueAndroidApplication(){
         super();
-        eventos = new ArrayList<Evento>();
-        servicemaneger = new servicemaneger(this);
+        setEventos(new ArrayList<Evento>());
+        setServicemaneger(new servicemaneger(this));
+        evento = null;
+        asistenciaActual = null;
     }
 
     public List<Evento> getEventos() {
@@ -33,5 +39,25 @@ public class PueAndroidApplication extends Application{
 
     public servicemaneger getServicemaneger() {
         return servicemaneger;
+    }
+
+    public void setServicemaneger(com.example.android_ed1.entitiesclass.model.servicelayer.manager.servicemaneger servicemaneger) {
+        this.servicemaneger = servicemaneger;
+    }
+
+    public Evento getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+
+    public Asistencia getAsistenciaActual() {
+        return asistenciaActual;
+    }
+
+    public void setAsistenciaActual(Asistencia asistenciaActual) {
+        this.asistenciaActual = asistenciaActual;
     }
 }

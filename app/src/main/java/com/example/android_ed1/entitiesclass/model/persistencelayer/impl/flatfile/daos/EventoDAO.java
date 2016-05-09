@@ -7,15 +7,19 @@ import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Evento;
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Participante;
 import com.example.android_ed1.entitiesclass.model.persistencelayer.api.IEventoDao;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -124,6 +128,45 @@ public class EventoDAO implements IEventoDao {
         return null;
     }
 
+    @Override
+    public Evento getEventoByDorsal(String dorsal) {
+        List<Evento> eventos = getEventosFromFlatFilen();
+        Evento evento = new Evento();
+        for (Evento e:eventos){
+            for (Participante inscrtio : e.getCorredores()){
+                if (inscrtio.getDorsal().equals(dorsal)){
+                    //muy importatne, juego de referencias y nos cargamos lo que sobar; para quedarnos oslo con el evento que nos ineteres
+                    e.setCorredores(new ArrayList<Participante>());
+                    e.getCorredores().add(inscrtio);
+                    evento = e;
+                    break;
+                }
+            }
+        }
+        return evento;
+    }
+
+    private List<Evento> getEventosFromFlatFilen (){
+        Gson gson = new Gson();
+
+        String eventosJSON = "";
+
+        try{
+
+            BufferedReader br = new BufferedReader(
+                new InputStreamReader(context.openFileInput("eventos.json"))
+            );
+            eventosJSON = br.readLine();
+            br.close();
+
+        }catch (Exception e){
+            Log.e("FlatFileEventoDao", e.getMessage());
+        }
+
+        return gson.fromJson(eventosJSON,new TypeToken<List<Evento>>(){}.getType());
+
+
+    }
 
 
 }
