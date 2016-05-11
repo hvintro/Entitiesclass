@@ -10,7 +10,7 @@ import java.util.UUID;
  *
  */
 public abstract class Entitybase {
-    public static final int ENTITY_UNSAVED_VALUE=-1;
+    private static final int ENTITY_UNSAVED_VALUE=-1;
 
     //identificador del objeto
     private UUID uuid;
@@ -20,9 +20,13 @@ public abstract class Entitybase {
     private Date insertedDBDate;
 
     public Entitybase(){
-        uuid = UUID.randomUUID();
-        id = ENTITY_UNSAVED_VALUE;
-        insertedDBDate = null;
+        setUuid(UUID.randomUUID());
+        setId(getEntityUnsavedValue());
+        setInsertedDBDate(null);
+    }
+
+    public static int getEntityUnsavedValue() {
+        return ENTITY_UNSAVED_VALUE;
     }
 
     public UUID getUuid() {
@@ -36,4 +40,12 @@ public abstract class Entitybase {
     public Date getInsertedDBDate() {return insertedDBDate;}
 
     public void setInsertedDBDate(Date insertedDBDate) {this.insertedDBDate = insertedDBDate;}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

@@ -25,7 +25,7 @@
         android:id="@+id/main_etDorsal"
         android:layout_below="@+id/main_tv_dorsal"
         android:layout_centerHorizontal="true"
-        android:text="00005"/>
+        android:text="00023"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -54,7 +54,6 @@
     android:layout_below="@+id/Readbutton"
     android:layout_centerInParent="true"
     android:layout_marginTop="30dp"
-    android:src="@drawable/startbutton"
     android:background="@color/accent_material_dark"
     android:visibility="invisible"
     android:id="@+id/main_btn_start"

@@ -1,5 +1,6 @@
 package com.example.android_ed1.entitiesclass.presentationlayer.activities;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Partici
 import com.example.android_ed1.entitiesclass.model.busineslayer.entities.Session;
 import com.example.android_ed1.entitiesclass.model.servicelayer.manager.servicemaneger;
 import com.example.android_ed1.entitiesclass.presentationlayer.androidextends.application.PueAndroidApplication;
+import com.example.android_ed1.entitiesclass.presentationlayer.services.GeoPositionService;
 import com.example.android_ed1.entitiesclass.utilitieslayer.AppUtils;
 
 import java.text.DateFormat;
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private double seconds;
     private Button read;
     private ImageButton main_btn_start;
+    private GeoPositionService geoPositionService;
+    private Intent intent;
 
 
 
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         }catch (ParseException e){e.printStackTrace();}
 
         main_btn_start = (ImageButton) findViewById(R.id.main_btn_start);
+        main_btn_start.setImageResource(R.drawable.startbutton);
         main_btn_start.setTag("Start");
         searched = (EditText) findViewById(R.id.main_etDorsal);
         resulttv = (TextView) findViewById(R.id.results);
@@ -92,9 +97,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (main_btn_start.getTag().equals("Start")) {
                     main_btn_start.setTag("Stop");
-                    main_btn_start.setBackgroundResource(R.drawable.stopbutton);
+                    main_btn_start.setImageResource(R.drawable.stopbutton);
 
                     app.setAsistenciaActual(servicemanager.getEventoService().addCurrentAssitenciaToEvent(app.getEvento()));
+
+                    if(app.getAsistenciaActual() != null) {
+                        geoPositionService = new GeoPositionService();
+                        intent = new Intent(MainActivity.this, GeoPositionService.class);
+                        startService(intent);
+                    }
+
 
                     //4 - Se ha decidido hacer en el evento service
                    /*
@@ -120,12 +132,13 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     main_btn_start.setTag("Start");
-                    main_btn_start.setBackgroundResource(R.drawable.startbutton);
+                    main_btn_start.setImageResource(R.drawable.startbutton);
 
 
                 }
             }
         });
+
 
 
 
@@ -199,14 +212,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
     }
 }
 
 class EventosAsincrono extends AsyncTask<Object, Object, Evento>{
-
+    //tot lo que pongamos en app es lo que tendremos a nivel global
     private PueAndroidApplication app=null;
     private ImageButton main_btn_start = null;
 
@@ -220,6 +230,7 @@ class EventosAsincrono extends AsyncTask<Object, Object, Evento>{
 
             Evento evento = app.getServicemaneger().getEventoService().getEventobydorsal2(dorsal);
             app.setEvento(evento);
+
             return evento;
 
         }catch (Exception e){
@@ -232,8 +243,10 @@ class EventosAsincrono extends AsyncTask<Object, Object, Evento>{
     protected void onPostExecute(Evento evento){
         super.onPostExecute(evento);
 
-        if(evento != null){
+        if(evento != null && !evento.getSesiones().isEmpty()){
             main_btn_start.setVisibility(View.VISIBLE);
+        }else{
+            main_btn_start.setVisibility(View.GONE);
         }
 
     }

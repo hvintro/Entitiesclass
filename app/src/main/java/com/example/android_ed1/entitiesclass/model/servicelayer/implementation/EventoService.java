@@ -90,10 +90,9 @@ public class EventoService implements IEventoService {
 
         evento.setCorredores(corredores);
 
-
         Session sesion1 = new Session();
         sesion1.setFechainicio(new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse("02/05/2016 15:30:00"));
-        sesion1.setFechafin(new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse("2/05/2016 20:30:00"));
+        sesion1.setFechafin(new SimpleDateFormat("dd/MM/yy HH:mm:ss").parse("2/05/2017 20:30:00"));
         evento.getSesiones().add(sesion1);
 
         Session sesion2 = new Session();
@@ -164,6 +163,11 @@ public class EventoService implements IEventoService {
           //  flatFilePersistenceManager.getEventoDAO().eventoRead();
         }catch (JSONException e){
 
+        }  try {
+            sqlPersistenceManager.getEventoDAO().eventosSave(eventos);
+
+        }catch (JSONException e){
+            e.printStackTrace();
         }
 
         return eventos;

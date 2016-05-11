@@ -10,14 +10,8 @@ import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by android-ed1 on 27/04/2016.
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
-@interface macundra{}
 public class Evento extends Entitybase {
-    @macundra()
+
     private String nombre;
     private String descripcion;
     private int numeroplazas;

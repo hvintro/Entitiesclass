@@ -25,7 +25,7 @@ public class PueAndroidApplication extends Application{
         setEventos(new ArrayList<Evento>());
         setServicemaneger(new servicemaneger(this));
         evento = null;
-        asistenciaActual = null;
+        setAsistenciaActual(null);
     }
 
     public List<Evento> getEventos() {

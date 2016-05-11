@@ -25,7 +25,7 @@ public abstract class PersistenceManager {
                 persistenceManager = new FlatFilePersistenceManager(context);
                 break;
             case SQL:
-                persistenceManager = new SqlPersistenceManager();
+                persistenceManager = new SqlPersistenceManager(context);
                 break;
             case REST:
                 persistenceManager = new RestPersistenceManager();
