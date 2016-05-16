@@ -8,3 +8,6 @@
 /captures
 modules.xml
 misc.xml
+.name
+gradle.xml
+vcs.xml
